@@ -2,6 +2,7 @@
 
 use std::fmt::Formatter;
 
+use colored::Colorize;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -24,7 +25,13 @@ pub struct InternationalRanking {
 
 impl std::fmt::Display for InternationalRanking {
     fn fmt(&self, _: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
-        println!("{}. {} - {}", self.pos, self.team.name, self.pts);
+        let delta = self.previousPos - self.pos;
+        print!("{}. {} - {}", self.pos, self.team.name, self.pts);
+        if delta < 0 {
+            print!(" {}", delta.to_string().red());
+        } else if delta > 0 {
+            print!(" +{}", delta.to_string().bright_green());
+        }
         Ok(())
     }
 }
